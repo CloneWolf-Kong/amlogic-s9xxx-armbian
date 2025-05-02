@@ -161,6 +161,7 @@ runs:
             [[ -n "${{ inputs.armbian_fstype }}" ]] && make_command="${make_command} -t ${{ inputs.armbian_fstype }}"
             [[ -n "${{ inputs.armbian_size }}" ]] && make_command="${make_command} -s ${{ inputs.armbian_size }}"
             [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
+            echo "调用rebuild时的参数：${make_command}"
             sudo ./rebuild ${make_command}
 
             cd ${{ github.action_path }}/${armbian_filepath}
@@ -226,6 +227,7 @@ runs:
             [[ -n "${{ inputs.kernel_sign }}" ]] && make_command="${make_command} -n ${{ inputs.kernel_sign }}"
             [[ -n "${{ inputs.kernel_toolchain }}" ]] && make_command="${make_command} -t ${{ inputs.kernel_toolchain }}"
             [[ -n "${{ inputs.compress_format }}" ]] && make_command="${make_command} -c ${{ inputs.compress_format }}"
+            echo "调用recompile时的参数：${make_command}"
             sudo ./recompile ${make_command}
 
             cd ${{ github.action_path }}
