@@ -45,7 +45,7 @@ current_path="${PWD}"
 compile_path="${current_path}/compile-kernel"
 kernel_path="${compile_path}/kernel"
 config_path="${compile_path}/tools/config"
-overlay-dts="${compile_path}/dts"
+dts_path="${compile_path}/dts"
 script_path="${compile_path}/tools/script"
 kernel_patch_path="${compile_path}/tools/patch"
 armbian_path="${compile_path}/tools/armbian"
@@ -581,6 +581,9 @@ compile_env() {
     #MAKE_SET_STRING=" ARCH=${SRC_ARCH} CROSS_COMPILE=${CROSS_COMPILE} CC=${CC} LD=${LD} ${MFLAGS} LOCALVERSION=${LOCALVERSION} "
     MAKE_SET_STRING=" ARCH=${SRC_ARCH} CROSS_COMPILE=${CROSS_COMPILE} CC=${CC} LD=${LD} ${MFLAGS} "
 
+    ##复制DTS
+    copy_dts
+
     # Make clean/mrproper
     make ${MAKE_SET_STRING} mrproper
     
@@ -595,9 +598,6 @@ compile_env() {
     # Clear kernel signature
     sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"\"|" .config
 
-    ##复制DTS
-    copy_dts
-    
     # Enable/Disabled Linux Kernel Clang LTO
     [[ "${toolchain_name}" == "clang" ]] && {
         kernel_x="$(echo "${kernel_version}" | cut -d '.' -f1)"
@@ -716,10 +716,10 @@ copy_dts(){
     echo "current_path变量的目录树结构:"
     echo "$(tree -L 3 ${current_path} || true)"
     shopt -s globstar
-    if [[ "$(ls ${GITHUB_WORKSPACE}/${overlay-dts}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
+    if [[ "$(ls ${dts_path}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
       echo -e "正在复制自定义DTS到源代码目录..."
-      cp -vrf ${overlay-dts}/* -t ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts
-      ##find ${overlay-dts} -name '*.dts' -exec cp --parents -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
+      cp -vrf ${dts_path}/* -t ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts
+      ##find ${dts_path} -name '*.dts' -exec cp --parents -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
     fi
     shopt -s globstar
 }
