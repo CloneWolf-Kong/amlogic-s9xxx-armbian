@@ -629,7 +629,7 @@ compile_dtbs() {
 compile_kernel() {
     cd ${kernel_path}/${local_kernel_path}
     
-
+    
 
     # Make kernel
     echo -e "${STEPS} Start compilation kernel [ ${local_kernel_path} ]..."
@@ -702,6 +702,8 @@ packit_kernel() {
     mv -f *.tar.gz ${output_path}/${kernel_version}
     echo -e "${SUCCESS} The [ boot-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
 
+    echo "[内核模块]目录树结构:\n $(tree -L 2 ${output_path}/modules/lib || true)"
+     
     cd ${output_path}/modules/lib/modules
     tar -czf modules-${kernel_outname}${custom_name}.tar.gz *
     mv -f *.tar.gz ${output_path}/${kernel_version}
