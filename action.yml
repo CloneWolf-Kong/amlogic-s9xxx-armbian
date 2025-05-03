@@ -221,8 +221,9 @@ runs:
             sudo -E apt-get -y install tree
             overlay_dts="compile-kernel/dts"
             dts_config="kernel-config/dts"
-            echo "overlay_dts变量的目录树结构：\n$(tree -L 3 ${GITHUB_WORKSPACE}/${overlay_dts} || true)"
-            echo "dts_config变量的目录树结构：\n$(tree -L 3 ${GITHUB_WORKSPACE}/${dts_config} || true)"
+            echo "overlay_dts变量的目录树结构:"
+            echo "$(tree -L 3 ${GITHUB_WORKSPACE}/${overlay_dts} || true)"
+            echo "dts_config变量的目录树结构:\n $(tree -L 3 ${GITHUB_WORKSPACE}/${dts_config} || true)"
             [[ -d "${overlay_dts}" ]] || mkdir -p ${overlay_dts}
             # 定义变量 overlay_dts，指定 DTS 文件的根路径为 "compile-kernel/dts"。
             if [[ -d "${GITHUB_WORKSPACE}/${dts_config}" ]]; then
@@ -230,7 +231,7 @@ runs:
                 if [[ "$(ls ${GITHUB_WORKSPACE}/${dts_config}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
                     echo -e "发现用户自定义DTS，开始导入DTS文件..."
                     rm -f ${overlay_dts}/* 2>/dev/null && sync
-                    find ${GITHUB_WORKSPACE}/${dts_config} -name '*.dts' -exec cp -vf {} ${overlay_dts}/ \; 2>/dev/null && sync
+                    find ${GITHUB_WORKSPACE}/${dts_config} -name '*.dts' -exec cp --parents -vf {} ${overlay_dts}/ \; 2>/dev/null && sync
                     ##cp -vf ${GITHUB_WORKSPACE}/${dts_config}/**/*.dts ${overlay_dts}/ 2>/dev/null && sync
                     echo -e "自定义DTS文件列表: \n$(ls -ld ${overlay_dts}/**)"
                 else
