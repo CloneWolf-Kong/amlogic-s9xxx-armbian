@@ -231,8 +231,7 @@ runs:
                 if [[ "$(ls ${GITHUB_WORKSPACE}/${dts_config}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
                     echo -e "发现用户自定义DTS，开始导入DTS文件..."
                     rm -rf ${overlay_dts}/* 2>/dev/null && sync
-                    rsync -avm --include='*.dts' --exclude='*' ${GITHUB_WORKSPACE}/${dts_config}/ ${overlay_dts}/ && sync
-                    ##cp -vf ${GITHUB_WORKSPACE}/${dts_config}/**/*.dts ${overlay_dts}/ 2>/dev/null && sync
+                    cp -vrf ${GITHUB_WORKSPACE}/${dts_config}/* -t ${overlay_dts} && sync
                     echo -e "自定义DTS文件列表: \n$(ls -ld ${overlay_dts}/**)"
                 else
                     echo -e "自定义DTS路径无效，忽略导入..."
