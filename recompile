@@ -726,7 +726,7 @@ copy_dts(){
 
 compile_selection() {
     # Compile by selection
-    //copy_dts
+    ##copy_dts
     if [[ "${package_list}" == "dtbs" ]]; then
         compile_dtbs
         packit_dtbs
