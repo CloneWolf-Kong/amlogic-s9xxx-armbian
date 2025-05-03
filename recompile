@@ -718,7 +718,7 @@ copy_dts(){
     shopt -s globstar
     if [[ "$(ls ${GITHUB_WORKSPACE}/${overlay-dts}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
       echo -e "正在复制自定义DTS到源代码目录..."
-      rsync -avm --include='*.dts' --exclude='*' ${overlay-dts}/ ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ && sync
+      cp -vrf ${overlay-dts}/* -t ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts
       ##find ${overlay-dts} -name '*.dts' -exec cp --parents -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
     fi
     shopt -s globstar
