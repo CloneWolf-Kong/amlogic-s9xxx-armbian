@@ -557,7 +557,8 @@ compile_env() {
     echo -e "${STEPS} Start checking local compilation environments..."
 
     # Get kernel output name
-    kernel_outname="${kernel_version}${custom_name}"
+    #kernel_outname="${kernel_version}${custom_name}"
+    kernel_outname="${kernel_version}"
     echo -e "${INFO} Compile kernel output name: [ ${kernel_outname} ]"
 
     # Create a temp directory
@@ -654,9 +655,9 @@ packit_dtbs() {
             mkdir -p overlay
             cp -f ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/allwinner/overlay/*.dtbo overlay/ 2>/dev/null
         }
-        tar -czf dtb-allwinner-${kernel_outname}.tar.gz *
+        tar -czf dtb-allwinner-${kernel_outname}${custom_name}.tar.gz *
         mv -f *.tar.gz ${output_path}/${kernel_version}
-        echo -e "${SUCCESS} The [ dtb-allwinner-${kernel_outname}.tar.gz ] file is packaged."
+        echo -e "${SUCCESS} The [ dtb-allwinner-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
     }
 
     cd ${output_path}/dtb/amlogic
@@ -666,9 +667,9 @@ packit_dtbs() {
             mkdir -p overlay
             cp -f ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/amlogic/overlay/*.dtbo overlay/ 2>/dev/null
         }
-        tar -czf dtb-amlogic-${kernel_outname}.tar.gz *
+        tar -czf dtb-amlogic-${kernel_outname}${custom_name}.tar.gz *
         mv -f *.tar.gz ${output_path}/${kernel_version}
-        echo -e "${SUCCESS} The [ dtb-amlogic-${kernel_outname}.tar.gz ] file is packaged."
+        echo -e "${SUCCESS} The [ dtb-amlogic-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
     }
 
     cd ${output_path}/dtb/rockchip
@@ -678,9 +679,9 @@ packit_dtbs() {
             mkdir -p overlay
             cp -f ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/rockchip/overlay/*.dtbo overlay/ 2>/dev/null
         }
-        tar -czf dtb-rockchip-${kernel_outname}.tar.gz *
+        tar -czf dtb-rockchip-${kernel_outname}${custom_name}.tar.gz *
         mv -f *.tar.gz ${output_path}/${kernel_version}
-        echo -e "${SUCCESS} The [ dtb-rockchip-${kernel_outname}.tar.gz ] file is packaged."
+        echo -e "${SUCCESS} The [ dtb-rockchip-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
     }
 }
 
@@ -691,18 +692,18 @@ packit_kernel() {
     cd ${output_path}/boot
     rm -rf dtb-*
     chmod +x *
-    tar -czf boot-${kernel_outname}.tar.gz *
+    tar -czf boot-${kernel_outname}${custom_name}.tar.gz *
     mv -f *.tar.gz ${output_path}/${kernel_version}
-    echo -e "${SUCCESS} The [ boot-${kernel_outname}.tar.gz ] file is packaged."
+    echo -e "${SUCCESS} The [ boot-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
 
     cd ${output_path}/modules/lib/modules
-    tar -czf modules-${kernel_outname}.tar.gz *
+    tar -czf modules-${kernel_outname}${custom_name}.tar.gz *
     mv -f *.tar.gz ${output_path}/${kernel_version}
-    echo -e "${SUCCESS} The [ modules-${kernel_outname}.tar.gz ] file is packaged."
+    echo -e "${SUCCESS} The [ modules-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
 
     cd ${output_path}/${kernel_version}
-    [[ -n "$(ls header-${kernel_outname}.tar.gz 2>/dev/null)" ]] && {
-        echo -e "${SUCCESS} The [ header-${kernel_outname}.tar.gz ] file is packaged."
+    [[ -n "$(ls header-${kernel_outname}${custom_name}.tar.gz 2>/dev/null)" ]] && {
+        echo -e "${SUCCESS} The [ header-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
     }
 }
 
