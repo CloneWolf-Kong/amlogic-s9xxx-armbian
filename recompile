@@ -45,6 +45,7 @@ current_path="${PWD}"
 compile_path="${current_path}/compile-kernel"
 kernel_path="${compile_path}/kernel"
 config_path="${compile_path}/tools/config"
+overlay-dts="${compile_path}/dts"
 script_path="${compile_path}/tools/script"
 kernel_patch_path="${compile_path}/tools/patch"
 armbian_path="${compile_path}/tools/armbian"
@@ -624,6 +625,8 @@ compile_dtbs() {
 
 compile_kernel() {
     cd ${kernel_path}/${local_kernel_path}
+    
+
 
     # Make kernel
     echo -e "${STEPS} Start compilation kernel [ ${local_kernel_path} ]..."
@@ -706,9 +709,18 @@ packit_kernel() {
         echo -e "${SUCCESS} The [ header-${kernel_outname}${custom_name}.tar.gz ] file is packaged."
     }
 }
+copy_dts(){
+    shopt -s globstar
+    if [[ "$(ls ${overlay-dts}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
+      echo -e "正在复制自定义DTS到源代码目录..."
+      find ${overlay-dts} -name '*.dts' -exec cp -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
+    fi
+    shopt -s globstar
+}
 
 compile_selection() {
     # Compile by selection
+    copy_dts
     if [[ "${package_list}" == "dtbs" ]]; then
         compile_dtbs
         packit_dtbs
