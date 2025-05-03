@@ -713,7 +713,7 @@ copy_dts(){
     shopt -s globstar
     if [[ "$(ls ${overlay-dts}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
       echo -e "正在复制自定义DTS到源代码目录..."
-      find ${overlay-dts} -name '*.dts' -exec cp -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
+      find ${overlay-dts} -name '*.dts' -exec cp --parents -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
     fi
     shopt -s globstar
 }
