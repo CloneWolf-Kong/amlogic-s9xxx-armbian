@@ -31,7 +31,7 @@ inputs:
   auto_kernel:
     description: "Auto use the latest kernel."
     required: false
-    default: "true"
+    default: "false"
   armbian_fstype:
     description: "Set armbian rootfs type: ext4 / btrfs"
     required: false
