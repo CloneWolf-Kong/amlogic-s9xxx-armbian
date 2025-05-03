@@ -96,7 +96,7 @@ runs:
         echo -e "Current running path: [ ${PWD} ]"
         build_target="${{ inputs.build_target }}"
         [[ -z "${build_target}" ]] && build_target="armbian"
-
+                
         if [[ "${build_target}" == "armbian" ]]; then
 
             cd ${{ github.action_path }}
@@ -186,7 +186,7 @@ runs:
 
             cd ${{ github.action_path }}
             echo -e "Start compile kernel..."
-
+            
             config_filepath="compile-kernel/tools/config"
             kernel_outpath="compile-kernel/output"
             [[ -d "${config_filepath}" ]] || mkdir -p ${config_filepath}
@@ -217,6 +217,26 @@ runs:
             else
                 echo -e "No custom kernel patches available."
             fi
+            
+            overlay_dts="compile-kernel/dts"
+            dts_config="kernel-config/dts"
+            [[ -d "${overlay_dts}" ]] || mkdir -p ${overlay_dts}
+            # 定义变量 overlay_dts，指定 DTS 文件的根路径为 "compile-kernel/dts"。
+            if [[ -d "${GITHUB_WORKSPACE}/${dts_config}" ]]; then
+                shopt -s globstar
+                if [[ "$(ls ${GITHUB_WORKSPACE}/${dts_config}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
+                    echo -e "发现用户自定义DTS，开始导入DTS文件..."
+                    rm -f ${overlay_dts}/* 2>/dev/null && sync
+                    cp -vf ${GITHUB_WORKSPACE}/${dts_config}/**/*.dts ${overlay_dts}/ 2>/dev/null && sync
+                    echo -e "自定义DTS文件列表: \n$(ls -ld ${overlay_dts}/**)"
+                else
+                    echo -e "自定义DTS路径无效，忽略导入..."
+                fi
+                shopt -u globstar
+            else
+                echo -e "未发现用户自定义DTS..."
+            fi
+
 
             make_command=""
             [[ -n "${{ inputs.kernel_source }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_source }}"
