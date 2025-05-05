@@ -725,6 +725,8 @@ copy_dts() {
         #cp -vrf ${dts_path}/* -t arch/${SRC_ARCH}/boot/dts/
         # 使用 find 查找 *.dts 和 *.dtsi 文件并复制
         find "${dts_path}" -type f \( -name "*.dts" -o -name "*.dtsi" \) -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
+        # 同步操作
+        sync
     fi
 
     shopt -u globstar
