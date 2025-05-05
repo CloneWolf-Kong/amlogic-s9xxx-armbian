@@ -743,14 +743,17 @@ copy_dts() {
             else
                 echo -e "目标 Makefile 已包含 ${custom_makefile} 的内容，跳过追加。"
             fi
+
+
+            # 3. 输出目标 DTS 目录结构，供调试检查
+            echo "目标 DTS 目录的结构如下："
+            tree -L 3 ${target_makefile} || true
+            echo "目标Makefile文件内容："
+            cat ${target_makefile}/Makefile
         else
             echo -e "未找到目标 Makefile 或自定义 Makefile，请检查路径：\n  自定义: ${custom_makefile}\n  目标: ${target_makefile}"
         fi
     done
-
-    # 3. 输出目标 DTS 目录结构，供调试检查
-    echo "目标 DTS 目录的结构如下："
-    tree -L 3 arch/arm64/boot/dts || true
 }
 
 compile_selection() {
