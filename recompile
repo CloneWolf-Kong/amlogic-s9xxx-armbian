@@ -717,14 +717,14 @@ packit_kernel() {
 }
 copy_dts(){
     echo "current_path变量的目录树结构:"
-    echo "$(tree -L 3 ${current_path} || true)"
+    echo "$(tree -L 3 arch/${SRC_ARCH}/boot || true)"
     shopt -s globstar
     if [[ "$(ls ${dts_path}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
       echo -e "正在复制自定义DTS到源代码目录..."
-      cp -vrf ${dts_path}/* -t ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts
+      cp -vrf ${dts_path}/* -t arch/${SRC_ARCH}/boot/dts
       ##find ${dts_path} -name '*.dts' -exec cp --parents -vf {} ${kernel_path}/${local_kernel_path}/arch/${SRC_ARCH}/boot/dts/ \; 2>/dev/null && sync
     fi
-    shopt -s globstar
+    shopt -u globstar
 }
 
 compile_selection() {
