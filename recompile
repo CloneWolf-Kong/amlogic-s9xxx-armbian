@@ -747,7 +747,7 @@ copy_dts() {
 
             # 3. 输出目标 DTS 目录结构，供调试检查
             echo "目标 DTS 目录的结构如下："
-            tree -L 3 ${target_makefile} || true
+            tree -L 2 $(dirname ${target_makefile})|| true
             echo "目标Makefile文件内容："
             cat ${target_makefile}/Makefile
         else
