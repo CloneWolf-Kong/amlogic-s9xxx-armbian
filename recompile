@@ -720,19 +720,19 @@ copy_dts() {
     shopt -s globstar
 
     # 1. 复制自定义 DTS 文件到目标项目路径
-    if [[ "$(ls ${dts_path}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
-        echo -e "正在复制自定义 DTS 文件到目标项目路径..."
-        #cp -vrf ${dts_path}/* -t arch/${SRC_ARCH}/boot/dts/
-        # 使用 find 查找 *.dts 和 *.dtsi 文件并复制
-        find "${dts_path}" -type f -name "*.dts" -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
-        find "${dts_path}" -type f -name "*.dtsi" -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
-        # 同步操作
-        sync
-    fi
+    #if [[ "$(ls ${dts_path}/**/*.dts -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
+    #    echo -e "正在复制自定义 DTS 文件到目标项目路径..."
+    #    #cp -vrf ${dts_path}/* -t arch/${SRC_ARCH}/boot/dts/
+    #    # 使用 find 查找 *.dts 和 *.dtsi 文件并复制
+    #    find "${dts_path}" -type f -name "*.dts" -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
+    #    find "${dts_path}" -type f -name "*.dtsi" -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
+    #    # 同步操作
+    #    sync
+    #fi
 
     shopt -u globstar
 
-    # 2. 遍历自定义 DTS 目录中的 Makefile
+    # 1. 遍历自定义 DTS 目录中的 Makefile
     for custom_makefile in $(find ${dts_path} -name 'Makefile' -type f 2>/dev/null); do
         # 计算目标 Makefile 的路径
         relative_path="${custom_makefile#${dts_path}/}" # 去掉自定义 DTS 根路径前缀
@@ -748,8 +748,10 @@ copy_dts() {
             else
                 echo -e "目标 Makefile 已包含 ${custom_makefile} 的内容，跳过追加。"
             fi
-
-
+            # 2. 复制dts文件
+            cp -rfv "$(dirname ${custom_makefile})/*.dts" "$(dirname ${target_makefile})/"
+            cp -rfv "$(dirname ${custom_makefile})/*.dtsi" "$(dirname ${target_makefile})/"
+            sync
             # 3. 输出目标 DTS 目录结构，供调试检查
             echo "目标 DTS 目录的结构如下："
             tree -L 2 $(dirname ${target_makefile})|| true
