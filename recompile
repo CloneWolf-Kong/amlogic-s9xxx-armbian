@@ -738,6 +738,8 @@ copy_dts() {
         relative_path="${custom_makefile#${dts_path}/}" # 去掉自定义 DTS 根路径前缀
         target_makefile="arch/${SRC_ARCH}/boot/dts/${relative_path}" # 拼接目标路径
 
+        echo "自定义 DTS 目录的结构如下："
+        tree -L 2 $(dirname ${custom_makefile})|| true
         # 检查并追加 Makefile 内容
         if [[ -f "${custom_makefile}" && -f "${target_makefile}" ]]; then
             echo -e "正在将自定义 Makefile (${custom_makefile}) 内容追加到目标 Makefile (${target_makefile})..."
@@ -749,8 +751,8 @@ copy_dts() {
                 echo -e "目标 Makefile 已包含 ${custom_makefile} 的内容，跳过追加。"
             fi
             # 2. 复制dts文件
-            cp -rfv "$(dirname ${custom_makefile})/*.dts" "$(dirname ${target_makefile})/"
-            cp -rfv "$(dirname ${custom_makefile})/*.dtsi" "$(dirname ${target_makefile})/"
+            cp -rfv $(dirname ${custom_makefile})/*.dts $(dirname ${target_makefile})/
+            cp -rfv $(dirname ${custom_makefile})/*.dtsi $(dirname ${target_makefile})/
             sync
             # 3. 输出目标 DTS 目录结构，供调试检查
             echo "目标 DTS 目录的结构如下："
