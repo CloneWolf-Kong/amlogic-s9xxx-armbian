@@ -724,7 +724,8 @@ copy_dts() {
         echo -e "正在复制自定义 DTS 文件到目标项目路径..."
         #cp -vrf ${dts_path}/* -t arch/${SRC_ARCH}/boot/dts/
         # 使用 find 查找 *.dts 和 *.dtsi 文件并复制
-        find "${dts_path}" -type f \( -name "*.dts" -o -name "*.dtsi" \) -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
+        find "${dts_path}" -type f -name "*.dts" -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
+        find "${dts_path}" -type f -name "*.dtsi" -exec cp --parents {} "arch/${SRC_ARCH}/boot/dts/" \;
         # 同步操作
         sync
     fi
