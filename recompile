@@ -430,12 +430,13 @@ get_kernel_source() {
         cd ${kernel_path}/${local_kernel_path}
         #git checkout ${code_branch} && git reset --hard origin/${code_branch} && git pull
         kernel_version="${local_makefile_version}.${local_makefile_patchlevel}.${kernel_sub}"
-        echo -e "${INFO} 自动选择kernel 版本:[ ${kernel_version} ]."
+        echo -e "${INFO} 自动选择kernel 版本为:[ ${kernel_version} ]."
     else
         #kernel_version
         cd ${kernel_path}/${local_kernel_path}
         # Reset to local kernel version number
-        #kernel_version="${local_makefile_version}.${local_makefile_patchlevel}.${local_makefile_sublevel}"
+        git reset --hard $(git log --grep=${kernel_version} --oneline | head -n 1 | awk '{print $1}')
+        echo -e "${INFO} 切换kernel 版本为:[ ${kernel_version} ]."
     fi
     # Remove the local version number
     rm -f ${kernel_path}/${local_kernel_path}/localversion
