@@ -435,9 +435,10 @@ get_kernel_source() {
         #kernel_version
         cd ${kernel_path}/${local_kernel_path}
         # Reset to local kernel version number
-        echo -e "执行命令：git log --grep=${kernel_version} --oneline | head -n 1 | awk '{print $1}'"
-        git reset --hard $(git log --grep=${kernel_version} --oneline | head -n 1 | awk '{print $1}')
-        echo -e "${INFO} 切换kernel 版本为:[ ${kernel_version} ]."
+
+        COMMIT_HASH=$(git log --grep="$kernel_version" --oneline | head -n 1 | awk '{print $1}')
+        echo -e "${INFO} 源代码[${kernel_version}]版的哈希为:${COMMIT_HASH}"
+        git reset --hard ${COMMIT_HASH}
     fi
     # Remove the local version number
     rm -f ${kernel_path}/${local_kernel_path}/localversion
