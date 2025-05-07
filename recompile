@@ -422,10 +422,10 @@ get_kernel_source() {
     local_makefile_version="$(cat ${local_makefile} | grep -oE "VERSION =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
     local_makefile_patchlevel="$(cat ${local_makefile} | grep -oE "PATCHLEVEL =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
     local_makefile_sublevel="$(cat ${local_makefile} | grep -oE "SUBLEVEL =.*" | head -n 1 | grep -oE '[0-9]{1,3}')"
-    echo -e "${INFO} 克隆得到的kernel 版本:[ ${local_makefile_version}.${local_makefile_patchlevel}.${kernel_sub} ]."
+    echo -e "${INFO} 克隆得到的kernel 版本:[ ${local_makefile_version}.${local_makefile_patchlevel}.${local_makefile_sublevel} ]."
 
     # Local version and server version comparison
-    if [[ "${auto_kernel}" == "true" || "${auto_kernel}" == "yes" ]] && [[ "${kernel_sub}" -gt "${local_makefile_sublevel}" ]]; then
+    if { [[ "${auto_kernel}" == "true" || "${auto_kernel}" == "yes" ]] && [[ ! "${kernel_sub}" =~ ^[0-9]+$ ]]; } || [[ "${kernel_sub}" -gt "${local_makefile_sublevel}" ]]; then
         # Pull the latest source code of the server
         cd ${kernel_path}/${local_kernel_path}
         #git checkout ${code_branch} && git reset --hard origin/${code_branch} && git pull
