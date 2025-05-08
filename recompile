@@ -605,6 +605,16 @@ compile_env() {
 
     # Make menuconfig
     #make ${MAKE_SET_STRING} menuconfig
+    # 输出内核版本
+    echo -e "${INFO} 内核版本[make kernelversion] :$(make kernelversion)"
+    # 输出内核发布版本
+    echo -e "${INFO} 内核发布版本[make kernelrelease] :$(make kernelrelease)"
+    # 输出 setlocalversion 的结果
+    if [ -f "./scripts/setlocalversion" ]; then
+      echo -e "${INFO} 脚本[./scripts/setlocalversion] 输出: $(./scripts/setlocalversion)"
+    else
+      echo -e "${INFO} 脚本[./scripts/setlocalversion] 脚本未找到"
+    fi
 
     # Set max process
     PROCESS="$(cat /proc/cpuinfo | grep "processor" | wc -l)"
