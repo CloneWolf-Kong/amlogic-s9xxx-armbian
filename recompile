@@ -444,10 +444,11 @@ get_kernel_source() {
         git reset --hard ${COMMIT_HASH}
     fi
     
-    rm -rf .git*
+    
     # Remove the local version number
-    #rm -f ${kernel_path}/${local_kernel_path}/localversion
-    echo "${kernel_version}" > ${kernel_path}/${local_kernel_path}/localversion
+    rm -f ${kernel_path}/${local_kernel_path}/localversion
+    rm -rf ${kernel_path}/${local_kernel_path}/.git*
+    #echo "${kernel_version}" > ${kernel_path}/${local_kernel_path}/localversion
 
     # Apply custom kernel patches
     [[ "${auto_patch}" == "true" || "${auto_patch}" == "yes" ]] && apply_patch
@@ -622,6 +623,17 @@ compile_env() {
 
     # Make menuconfig
     #make ${MAKE_SET_STRING} menuconfig
+
+    # 输出内核版本
+    echo -e "${INFO} make kernelversion 输出: V$(make kernelversion)"
+    # 输出内核发布版本
+    echo -e "${INFO} make kernelrelease 输出: V$(make kernelrelease)"
+    # 输出 setlocalversion 的结果
+    if [ -f "./scripts/setlocalversion" ]; then
+        echo -e "${INFO} ./scripts/setlocalversion 输出: V$(./scripts/setlocalversion)"
+    else
+        echo -e "${INFO} ./scripts/setlocalversion 脚本未找到"
+    fi
 
     # Set max process
     PROCESS="$(cat /proc/cpuinfo | grep "processor" | wc -l)"
