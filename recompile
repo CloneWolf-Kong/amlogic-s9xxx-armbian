@@ -430,7 +430,7 @@ get_kernel_source() {
         # Pull the latest source code of the server
         cd ${kernel_path}/${local_kernel_path}
         #git checkout ${code_branch} && git reset --hard origin/${code_branch} && git pull
-        kernel_version="${local_makefile_version}.${local_makefile_patchlevel}.${kernel_sub}"
+        kernel_version="${local_makefile_version}.${local_makefile_patchlevel}.${local_makefile_sublevel}"
         echo -e "${INFO} 自动选择kernel 版本为:[ ${kernel_version} ]."
     else
         #kernel_version
@@ -441,7 +441,7 @@ get_kernel_source() {
         echo -e "${INFO} 执行git log --grep=${kernel_version} --oneline结果：$(git log --grep="$kernel_version" --oneline)"
         COMMIT_HASH=$(git log --grep="${kernel_version}" --oneline | head -n 1 | awk '{print $1}')
         echo -e "${INFO} 源代码[${kernel_version}]版的哈希为:${COMMIT_HASH}"
-        git reset --hard ${COMMIT_HASH}&& git pull
+        git reset --hard ${COMMIT_HASH}
     fi
     # Remove the local version number
     rm -f ${kernel_path}/${local_kernel_path}/localversion
