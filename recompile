@@ -437,7 +437,8 @@ get_kernel_source() {
         # Reset to local kernel version number
 
         #COMMIT_HASH=$(git log --grep="$kernel_version" --oneline | head -n 1 | awk '{print $1}')
-        COMMIT_HASH=$(git log --grep="$kernel_version" --oneline)
+        echo -e "${INFO} 执行：git log --grep="$kernel_version" --oneline"
+        COMMIT_HASH=$(git log --grep=${kernel_version} --oneline)
         echo -e "${INFO} 源代码[${kernel_version}]版的哈希为:${COMMIT_HASH}"
         git reset --hard ${COMMIT_HASH}
     fi
