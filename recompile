@@ -228,7 +228,7 @@ init_var() {
 
     # Set cross compilation parameters
     export SRC_ARCH="arm64"
-    export LOCALVERSION="${custom_name}"
+    #export LOCALVERSION="${custom_name}"
 }
 
 toolchain_check() {
