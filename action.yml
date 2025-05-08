@@ -99,7 +99,7 @@ runs:
 
         cd ${{ github.action_path }}
         echo -e "Current running path: [ ${PWD} ]"
-        build_target="${{  github.event.inputs.build_target }}"
+        build_target="${{ inputs.build_target }}"
         [[ -z "${build_target}" ]] && build_target="armbian"
                 
         if [[ "${build_target}" == "armbian" ]]; then
@@ -107,7 +107,7 @@ runs:
             cd ${{ github.action_path }}
             echo -e "Start rebuilding Armbian..."
 
-            armbian_file="${{  github.event.inputs.armbian_path }}"
+            armbian_file="${{ inputs.armbian_path }}"
             armbian_filename="${armbian_file##*/}"
             armbian_filepath="build/output/images"
             echo -e "Get armbian file input parameters: [ ${armbian_file} ]"
@@ -158,14 +158,14 @@ runs:
             cd ${{ github.action_path }}
             echo -e "Start to rebuild armbian..."
             make_command=""
-            [[ -n "${{  github.event.inputs.armbian_board }}" ]] && make_command="${make_command} -b ${{  github.event.inputs.armbian_board }}"
-            [[ -n "${{  github.event.inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{  github.event.inputs.kernel_repo }}"
-            [[ -n "${{  github.event.inputs.kernel_usage }}" ]] && make_command="${make_command} -u ${{  github.event.inputs.kernel_usage }}"
-            [[ -n "${{  github.event.inputs.armbian_kernel }}" ]] && make_command="${make_command} -k ${{  github.event.inputs.armbian_kernel }}"
-            [[ -n "${{  github.event.inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{  github.event.inputs.auto_kernel }}"
-            [[ -n "${{  github.event.inputs.armbian_fstype }}" ]] && make_command="${make_command} -t ${{  github.event.inputs.armbian_fstype }}"
-            [[ -n "${{  github.event.inputs.armbian_size }}" ]] && make_command="${make_command} -s ${{  github.event.inputs.armbian_size }}"
-            [[ -n "${{  github.event.inputs.builder_name }}" ]] && make_command="${make_command} -n ${{  github.event.inputs.builder_name }}"
+            [[ -n "${{ inputs.armbian_board }}" ]] && make_command="${make_command} -b ${{ inputs.armbian_board }}"
+            [[ -n "${{ inputs.kernel_repo }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_repo }}"
+            [[ -n "${{ inputs.kernel_usage }}" ]] && make_command="${make_command} -u ${{ inputs.kernel_usage }}"
+            [[ -n "${{ inputs.armbian_kernel }}" ]] && make_command="${make_command} -k ${{ inputs.armbian_kernel }}"
+            [[ -n "${{ inputs.auto_kernel }}" ]] && make_command="${make_command} -a ${{ inputs.auto_kernel }}"
+            [[ -n "${{ inputs.armbian_fstype }}" ]] && make_command="${make_command} -t ${{ inputs.armbian_fstype }}"
+            [[ -n "${{ inputs.armbian_size }}" ]] && make_command="${make_command} -s ${{ inputs.armbian_size }}"
+            [[ -n "${{ inputs.builder_name }}" ]] && make_command="${make_command} -n ${{ inputs.builder_name }}"
             echo "调用rebuild时的参数：${make_command}"
             sudo ./rebuild ${make_command}
 
@@ -195,11 +195,11 @@ runs:
             config_filepath="compile-kernel/tools/config"
             kernel_outpath="compile-kernel/output"
             [[ -d "${config_filepath}" ]] || mkdir -p ${config_filepath}
-            if [[ -n "${{  github.event.inputs.kernel_config }}" && "${{  github.event.inputs.kernel_config }}" != "false" ]]; then
-                if [[ "$(ls ${GITHUB_WORKSPACE}/${{  github.event.inputs.kernel_config }}/config-* -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
+            if [[ -n "${{ inputs.kernel_config }}" && "${{ inputs.kernel_config }}" != "false" ]]; then
+                if [[ "$(ls ${GITHUB_WORKSPACE}/${{ inputs.kernel_config }}/config-* -l 2>/dev/null | grep "^-" | wc -l)" -ne "0" ]]; then
                     echo -e "Use a custom kernel compilation template..."
                     rm -f ${config_filepath}/* 2>/dev/null && sync
-                    cp -vf ${GITHUB_WORKSPACE}/${{  github.event.inputs.kernel_config }}/config-* ${config_filepath}/ 2>/dev/null && sync
+                    cp -vf ${GITHUB_WORKSPACE}/${{ inputs.kernel_config }}/config-* ${config_filepath}/ 2>/dev/null && sync
                     echo -e "List of Kernel Custom Compilation Configuration Templates: \n$(ls -l ${config_filepath})"
                 else
                     echo -e "The custom kernel compilation template path is invalid, continue to use the default template."
@@ -210,11 +210,11 @@ runs:
 
             custom_kernel_patch="compile-kernel/tools/patch"
             [[ -d "${custom_kernel_patch}" ]] || mkdir -p ${custom_kernel_patch}
-            if [[ -n "${{  github.event.inputs.kernel_patch }}" && "${{  github.event.inputs.kernel_patch }}" != "false" ]]; then
-                if [[ -d "${GITHUB_WORKSPACE}/${{  github.event.inputs.kernel_patch }}" ]]; then
+            if [[ -n "${{ inputs.kernel_patch }}" && "${{ inputs.kernel_patch }}" != "false" ]]; then
+                if [[ -d "${GITHUB_WORKSPACE}/${{ inputs.kernel_patch }}" ]]; then
                     echo -e "Use custom kernel patches..."
                     rm -rf ${custom_kernel_patch}/* 2>/dev/null && sync
-                    cp -vrf ${GITHUB_WORKSPACE}/${{  github.event.inputs.kernel_patch }}/* -t ${custom_kernel_patch} && sync
+                    cp -vrf ${GITHUB_WORKSPACE}/${{ inputs.kernel_patch }}/* -t ${custom_kernel_patch} && sync
                     echo -e "Directory of custom kernel patches: \n$(ls -l ${custom_kernel_patch})"
                 else
                     echo -e "Invalid custom kernel patch directory, skipping."
@@ -248,14 +248,14 @@ runs:
 
 
             make_command=""
-            [[ -n "${{  github.event.inputs.kernel_source }}" ]] && make_command="${make_command} -r ${{  github.event.inputs.kernel_source }}"
-            [[ -n "${{  github.event.inputs.kernel_version }}" ]] && make_command="${make_command} -k ${{  github.event.inputs.kernel_version }}"
-            [[ -n "${{  github.event.inputs.kernel_auto }}" ]] && make_command="${make_command} -a ${{  github.event.inputs.kernel_auto }}"
-            [[ -n "${{  github.event.inputs.kernel_package }}" ]] && make_command="${make_command} -m ${{  github.event.inputs.kernel_package }}"
-            [[ -n "${{  github.event.inputs.auto_patch }}" ]] && make_command="${make_command} -p ${{  github.event.inputs.auto_patch }}"
-            [[ -n "${{  github.event.inputs.kernel_sign }}" ]] && make_command="${make_command} -n ${{  github.event.inputs.kernel_sign }}"
-            [[ -n "${{  github.event.inputs.kernel_toolchain }}" ]] && make_command="${make_command} -t ${{  github.event.inputs.kernel_toolchain }}"
-            [[ -n "${{  github.event.inputs.compress_format }}" ]] && make_command="${make_command} -c ${{  github.event.inputs.compress_format }}"
+            [[ -n "${{ inputs.kernel_source }}" ]] && make_command="${make_command} -r ${{ inputs.kernel_source }}"
+            [[ -n "${{ inputs.kernel_version }}" ]] && make_command="${make_command} -k ${{ inputs.kernel_version }}"
+            [[ -n "${{ inputs.kernel_auto }}" ]] && make_command="${make_command} -a ${{ inputs.kernel_auto }}"
+            [[ -n "${{ inputs.kernel_package }}" ]] && make_command="${make_command} -m ${{ inputs.kernel_package }}"
+            [[ -n "${{ inputs.auto_patch }}" ]] && make_command="${make_command} -p ${{ inputs.auto_patch }}"
+            [[ -n "${{ inputs.kernel_sign }}" ]] && make_command="${make_command} -n ${{ inputs.kernel_sign }}"
+            [[ -n "${{ inputs.kernel_toolchain }}" ]] && make_command="${make_command} -t ${{ inputs.kernel_toolchain }}"
+            [[ -n "${{ inputs.compress_format }}" ]] && make_command="${make_command} -c ${{ inputs.compress_format }}"
             echo "调用recompile时的参数：${make_command}"
             sudo ./recompile ${make_command}
 
