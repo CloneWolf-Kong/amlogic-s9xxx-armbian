@@ -443,8 +443,11 @@ get_kernel_source() {
         echo -e "${INFO} 源代码[${kernel_version}]版的哈希为:${COMMIT_HASH}"
         git reset --hard ${COMMIT_HASH}
     fi
+    
+    rm -rf .git*
     # Remove the local version number
-    rm -f ${kernel_path}/${local_kernel_path}/localversion
+    #rm -f ${kernel_path}/${local_kernel_path}/localversion
+    echo "${kernel_version}" > ${kernel_path}/${local_kernel_path}/localversion
 
     # Apply custom kernel patches
     [[ "${auto_patch}" == "true" || "${auto_patch}" == "yes" ]] && apply_patch
