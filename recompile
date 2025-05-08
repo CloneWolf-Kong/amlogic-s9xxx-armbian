@@ -441,7 +441,7 @@ get_kernel_source() {
         echo -e "${INFO} 执行git log --grep=${kernel_version} --oneline结果：$(git log --grep="$kernel_version" --oneline)"
         COMMIT_HASH=$(git log --grep="${kernel_version}" --oneline | head -n 1 | awk '{print $1}')
         echo -e "${INFO} 源代码[${kernel_version}]版的哈希为:${COMMIT_HASH}"
-        git reset --hard ${COMMIT_HASH}
+        git reset --hard ${COMMIT_HASH}&& git pull
     fi
     # Remove the local version number
     rm -f ${kernel_path}/${local_kernel_path}/localversion
@@ -762,10 +762,10 @@ copy_dts() {
             cp -rfv $(dirname ${custom_makefile})/*.dtsi $(dirname ${target_makefile})/
             sync
             # 3. 输出目标 DTS 目录结构，供调试检查
-            echo "目标 DTS 目录的结构如下："
-            tree -L 2 $(dirname ${target_makefile})|| true
-            echo "目标Makefile文件内容："
-            cat ${target_makefile}
+            #echo "目标 DTS 目录的结构如下："
+            #tree -L 2 $(dirname ${target_makefile})|| true
+            #echo "目标Makefile文件内容："
+            #cat ${target_makefile}
         else
             echo -e "未找到目标 Makefile 或自定义 Makefile，请检查路径：\n  自定义: ${custom_makefile}\n  目标: ${target_makefile}"
         fi
