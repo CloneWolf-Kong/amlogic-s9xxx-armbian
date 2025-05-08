@@ -621,7 +621,7 @@ compile_env() {
     ##复制DTS
     copy_dts
     
-    make oldconfig
+    make ${MAKE_SET_STRING} oldconfig
     # Make menuconfig
     #make ${MAKE_SET_STRING} menuconfig
 
