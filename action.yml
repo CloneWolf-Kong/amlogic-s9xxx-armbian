@@ -92,6 +92,9 @@ runs:
   steps:
     - shell: bash
       run: |
+        [[ -d /var/run/act/actions/CloneWolf-Kong-amlogic-s9xxx-armbian@V2 ]] && ln -sf /builder/kernel /var/run/act/actions/CloneWolf-Kong-amlogic-s9xxx-armbian@V2/compile-kernel/kernel
+        [[ -d /var/run/act/actions/CloneWolf-Kong-amlogic-s9xxx-armbian@V2 ]] && ln -sf /builder/output /var/run/act/actions/CloneWolf-Kong-amlogic-s9xxx-armbian@V2/compile-kernel/output
+
         cd ${{ github.action_path }}
         echo -e "Current running path: [ ${PWD} ]"
         build_target="${{  github.event.inputs.build_target }}"
